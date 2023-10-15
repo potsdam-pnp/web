@@ -9,9 +9,11 @@
 
   outputs = { self, nixpkgs, flake-utils, pf2e-cards }:
     flake-utils.lib.eachDefaultSystem (system: 
-      let pkgs = nixpkgs.legacyPackages.${system}; in {
+      let pkgs = nixpkgs.legacyPackages.${system};
+          cards = pf2e-cards.packages.${system}.cards; in {
         packages = rec {
-          card-metadata-json = pkgs.callPackage ./card-metadata-json.nix { cards = pf2e-cards.packages.${system}.cards; };
+          card-metadata-json = pkgs.callPackage ./card-metadata-json.nix { inherit cards; };
+          card-images = pkgs.callPackage ./card-images.nix { inherit cards; };
           frontend = pkgs.callPackage ./. { card-metadata-json = card-metadata-json; };
           backend = pkgs.callPackage ./backend.nix {};
           default = frontend;
