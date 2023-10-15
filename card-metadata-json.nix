@@ -6,7 +6,7 @@ runCommand "pf2e-card-metadata.json" {
     const fs = require("fs").promises;
     async function main() {
       const content = await fs.readFile(process.argv[2], "utf8");
-      let started = false;
+      let started = false; let insideStarted = false;
       process.stdout.write("{");
       for (const line of content.split("\n")) {
         const index = line.indexOf("=");
@@ -15,9 +15,13 @@ runCommand "pf2e-card-metadata.json" {
         if (first === "page") {
           if (started) process.stdout.write("},");
           started = true;
+          process.stdout.write("\"");
           process.stdout.write(second);
-          process.stdout.write(":{");
+          process.stdout.write("\":{");
+          insideStarted = false;
         } else {
+          if (insideStarted) process.stdout.write(",");
+          insideStarted = true;
           process.stdout.write(JSON.stringify(first.substring(1)));
           process.stdout.write(":");
           process.stdout.write(JSON.stringify(second));
