@@ -22,4 +22,6 @@ jobs:
         name: potsdam-pnp
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: Compile
-      run: nix build --no-update-lock-file
+      run: nix build -o _site --no-update-lock-file
+    - uses: actions/upload-pages-artifact@v2
+    - uses: actions/deploy-pages@v2

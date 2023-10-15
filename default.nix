@@ -1,12 +1,11 @@
 { buildNpmPackage, nodejs }:
 
 buildNpmPackage rec {
-  pname = "web";
+  pname = "frontend";
   version = "0.1.0";
 
-  dontNpmBuild = true;
+  base = "/web";
 
-  src = ./src;
-  npmDepsHash = "sha256-mt9NhjHfOSvUxv+BviTW3UbVvcetVBIwAcpYZeEkW5U=";
+  src = ./frontend;
+  npmDepsHash = "sha256-nesHQ2mnTHmEQRY1cjFwlpmjfdU/UVXrSZxCjwIaJ5Q=";
 }
-
