@@ -13,6 +13,7 @@ buildNpmPackage rec {
   src = ./frontend;
 
   postPatch = ''
+    mkdir dependencies
     ln -s $CARDS_METADATA_JSON_FILE dependencies/card-metadata.json
     ln -s $CARDS_IMAGE_FOLDER dependencies/card-images
   '';
