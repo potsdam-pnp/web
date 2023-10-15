@@ -10,7 +10,9 @@
     flake-utils.lib.eachDefaultSystem (system: 
       let pkgs = nixpkgs.legacyPackages.${system}; in {
         packages = rec {
-          default = pkgs.callPackage ./. {};
+          frontend = pkgs.callPackage ./. {};
+          backend = pkgs.callPackage ./backend.nix {};
+          default = frontend;
         };
     });
 }
