@@ -1,4 +1,4 @@
-{ buildNpmPackage, nodejs }:
+{ buildNpmPackage, nodejs, cards }:
 
 buildNpmPackage rec {
   pname = "frontend";
@@ -6,6 +6,8 @@ buildNpmPackage rec {
 
   base = "/web";
   dontNpmInstall = true;
+
+  cardsMetadata = "${cards}/metadata.txt";
 
   src = ./frontend;
   npmDepsHash = "sha256-nesHQ2mnTHmEQRY1cjFwlpmjfdU/UVXrSZxCjwIaJ5Q=";
