@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom/client'
 
 import './scss/styles.scss'
 import cardMetadata from '../dependencies/card-metadata.json';
-const cardImages = import.meta.glob("../dependencies/card-images/*.png");
+const cardImages = (import.meta as any).glob("../dependencies/card-images/*.png");
 
 
 interface CardProperty {
   title: string;
   type: string;
   level: number;
-  page: number;
+  page: string;
 }
 
 interface CardType {
@@ -27,11 +27,11 @@ interface CardListProps {
 type CardListState = {[key: string]: boolean};
 
 class CardList extends React.Component<CardListProps, CardListState> {
-  constructor(props) {
+  constructor(props: CardListProps) {
     super(props);
     this.state = {};
   }
-  toggleExpand(cardType) {
+  toggleExpand(cardType: string) {
     return () =>  {
       console.log("Toggle " + cardType, this.state);
       this.setState({
@@ -70,10 +70,10 @@ class CardList extends React.Component<CardListProps, CardListState> {
 }
 
 function constructAllCards(): CardType[] {
-  const types = {};
+  const types: {[type: string]: CardProperty[]} = {};
 
   for (const key in cardMetadata) {
-    const card = cardMetadata[key];
+    const card: CardProperty = (cardMetadata as any)[key];
     if (card.type == "") continue;
     if (!types[card.type]) {
       types[card.type] = [];
@@ -97,8 +97,12 @@ interface CardInterface {
   card: CardProperty;
 }
 
-class Card extends React.Component<CardInterface> {
-  constructor(props) {
+interface CardState {
+  [page: string]: string
+}
+
+class Card extends React.Component<CardInterface, CardState> {
+  constructor(props: CardInterface) {
     super(props);
     this.state = {};
   }
@@ -116,7 +120,7 @@ class Card extends React.Component<CardInterface> {
       );
     } else {
       const page = this.props.card.page;
-      cardImages["../dependencies/card-images/" + page + ".png"]().then(result => {
+      cardImages["../dependencies/card-images/" + page + ".png"]().then((result: any) => {
         this.setState({
           ...this.state,
           [page]: result.default
@@ -130,7 +134,7 @@ class Card extends React.Component<CardInterface> {
 function App() {
   const [ state, setState ] = React.useState<CardProperty | null>(null);
   
-  function selectCard(card) {
+  function selectCard(card: CardProperty) {
     setState(card);
   }
 
