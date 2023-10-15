@@ -14,7 +14,7 @@
         packages = rec {
           card-metadata-json = pkgs.callPackage ./card-metadata-json.nix { inherit cards; };
           card-images = pkgs.callPackage ./card-images.nix { inherit cards; };
-          frontend = pkgs.callPackage ./. { card-metadata-json = card-metadata-json; };
+          frontend = pkgs.callPackage ./. { inherit card-metadata-json card-images; };
           backend = pkgs.callPackage ./backend.nix {};
           default = frontend;
         };
