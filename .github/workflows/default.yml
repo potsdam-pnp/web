@@ -1,0 +1,25 @@
+name: Build
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  compile:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v22
+      with:
+        extra_nix_config: "log-lines = 300"
+    - uses: cachix/cachix-action@v12
+      with:
+        name: potsdam-pnp
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    - name: Compile
+      run: nix build --no-update-lock-file
