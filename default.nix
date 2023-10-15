@@ -13,7 +13,8 @@ buildNpmPackage rec {
   src = ./frontend;
 
   postPatch = ''
-    ln -s $CARDS_METADATA_JSON_FILE src/js/card-metadata.json
+    ln -s $CARDS_METADATA_JSON_FILE dependencies/card-metadata.json
+    ln -s $CARDS_IMAGE_FOLDER dependencies/card-images
   '';
 
   npmDepsHash = "sha256-nesHQ2mnTHmEQRY1cjFwlpmjfdU/UVXrSZxCjwIaJ5Q=";
