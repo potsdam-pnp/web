@@ -13,6 +13,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "execa": "^8.0.1",
     "express": "^4.18.2"
   },
   "type": "module"
