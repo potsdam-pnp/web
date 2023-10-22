@@ -1,20 +1,10 @@
 import * as React from 'react'
-
-interface CardProperty {
-  title: string;
-  type: string;
-  level: number;
-  page: string;
-}
-
-interface CardType {
-  type: string;
-  cards: CardProperty[];
-}
+import { CardProperty, CardType } from "./card"
 
 interface CardSelectorProps {
   /** The text to display inside the button */
   cards: CardType[];
+  selectCard: (card: CardProperty) => void;
 }
 
 interface CardSelectorState {
@@ -45,6 +35,10 @@ export class CardSelector extends React.Component<CardSelectorProps, CardSelecto
     });
   }
 
+  addCard(card: CardProperty) {
+    return this.props.selectCard(card);
+  }
+
   render() {
     return React.createElement("div", { className: "d-flex" },
       React.createElement("div", { className: "d-flex flex-column p-2 flex-shrink-0", style: { width: "15em" }},
@@ -54,13 +48,14 @@ export class CardSelector extends React.Component<CardSelectorProps, CardSelecto
         ...(this.state.selectedType ? [React.createElement(CardList, { cards: this.state.selectedType.cards, selected: this.state.selectedCard, onSelect: (card) => this.selectCard(card) })] : [])
       ),
       React.createElement("div", { className: "d-flex flex-column p-2" },
-        ...(this.state.selectedCard ? [React.createElement(Card, { card: this.state.selectedCard })] : [])
+        ...(this.state.selectedCard ? [React.createElement(Card, { card: this.state.selectedCard, addCard: (card: CardProperty) => this.addCard(card) })] : [])
       )
     );
   }
 }
 
-interface CardTypeListProps extends CardSelectorProps {
+interface CardTypeListProps {
+  cards: CardType[];
   selected: CardType | null;
   onSelect: (cardType: CardType) => void;
 }
@@ -107,6 +102,7 @@ class CardList extends React.Component<CardListProps> {
 
 interface CardInterface {
   card: CardProperty;
+  addCard: (card: CardProperty) => void;
 }
 
 interface CardState {
@@ -120,6 +116,11 @@ class Card extends React.Component<CardInterface, CardState> {
     super(props);
     this.state = {};
   }
+
+  addCard() {
+    this.props.addCard(this.props.card);
+  }
+
   render() {
     if (this.state[this.props.card.page]) {
       const { title, type, level } = this.props.card;
@@ -133,7 +134,7 @@ class Card extends React.Component<CardInterface, CardState> {
               )
             ),
             React.createElement("div", {}, 
-              React.createElement("button", { type: "button", className: "btn btn-success" },
+              React.createElement("button", { type: "button", className: "btn btn-success", onClick: () => this.addCard() },
                 "Add"
               )
             )

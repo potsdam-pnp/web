@@ -1,21 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { CardSelector } from './card-selector';
+import { CardDecks } from './card-decks';
+import { CardProperty, CardType } from './card';
 
 import './scss/styles.scss'
 import cardMetadata from '../dependencies/card-metadata.json';
-
-interface CardProperty {
-  title: string;
-  type: string;
-  level: number;
-  page: string;
-}
-
-interface CardType {
-  type: string;
-  cards: CardProperty[];
-}
 
 function constructAllCards(): CardType[] {
   const types: {[type: string]: CardProperty[]} = {};
@@ -42,10 +32,16 @@ function constructAllCards(): CardType[] {
 }
 
 function App() {
+  const selectCard = (card: CardProperty) => {
+    // TODO
+    console.log("add card", card.title);
+  };
+
   return (
     <div className="container py-4 px-3 mx-auto">
       <h1>Building card decks</h1>
-      <CardSelector cards={constructAllCards()} />
+      <CardSelector cards={constructAllCards()} selectCard={selectCard} />
+      <CardDecks decks={[]} selected={null} />
     </div>
   );
 }
