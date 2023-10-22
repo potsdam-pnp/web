@@ -14,10 +14,9 @@ interface CardDecksProps {
 
 export class CardDecks extends React.Component<CardDecksProps > {
   render() {
-    return React.createElement("div", {},
-      React.createElement("div", {className: "d-flex flex-row"},
-        React.createElement(CardDecksPicker, this.props),
-      )
+    return React.createElement("div", {className: "d-flex flex-column"},
+      React.createElement("div", {}, React.createElement(CardDecksPicker, this.props)),
+      React.createElement(CardDeckC, {deck: this.props.selected})
     );
   }
 }
@@ -48,6 +47,19 @@ class CardDecksPicker extends React.Component<CardDecksProps> {
   }
 }
 
+interface CardDeckProps {
+  deck: CardDeck | null;
+}
+
+class CardDeckC extends React.Component<CardDeckProps> {
+  render() {
+    if (!this.props.deck) {
+      return "No card deck selected";
+    } else {
+      return "Selected " + this.props.deck.name;
+    }
+  }
+}
 
 class AddCardDeckModal extends React.Component {
   render() {
