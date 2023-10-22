@@ -125,12 +125,19 @@ class Card extends React.Component<CardInterface, CardState> {
       const { title, type, level } = this.props.card;
       return React.createElement("div", {className: "card"},
           React.createElement("img", { src: this.state[this.props.card.page], className: "card-img-top", alt: "Card image"}),
-          React.createElement("div", { className: "card-body"},
-            React.createElement("h5", { className: "card-title" }, title),
-            React.createElement("p", { className: "card-subtitle mb-2 text-body-secondary" },
-              type, " ", level
+          React.createElement("div", { className: "card-body d-flex flex-row justify-content-between"},
+            React.createElement("div", {},
+              React.createElement("h5", { className: "card-title" }, title),
+              React.createElement("p", { className: "card-subtitle mb-2 text-body-secondary" },
+                type, " ", level
+              )
+            ),
+            React.createElement("div", {}, 
+              React.createElement("button", { type: "button", className: "btn btn-success" },
+                "Add"
+              )
             )
-          )
+          ) 
         );
     } else {
       const page = this.props.card.page;
@@ -144,27 +151,3 @@ class Card extends React.Component<CardInterface, CardState> {
     }
   }
 }
-
-//         {
-//           this.props.cards.map(card => {
-//             return (
-//               <>
-//                 <li className="list-group-item justify-content-between d-flex list-group-item-action fw-bold" onClick={this.toggleExpand(card.type)} key={card.type}>
-//                   {card.type}
-//                   <span className="badge bg-secondary rounded-pill">{card.cards.length}</span>
-//                 </li>
-//                 {
-//                   this.state[card.type] ? 
-//                     card.cards.map((c, index) => {
-//                       return (
-//                        <li className="list-group-item list-group-item-action" key={card.type + "-" + index} onClick={() => this.props.selectCard(c)}>{c.title}</li>
-//                       )
-//                   }) : []
-//                 }
-//               </>
-//             )
-//           })
-//         }
-//       </ul>
-//   }
-// }
