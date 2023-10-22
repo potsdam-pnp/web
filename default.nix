@@ -18,5 +18,5 @@ buildNpmPackage rec {
     ln -s $CARDS_IMAGE_FOLDER dependencies/card-images
   '';
 
-  npmDepsHash = "sha256-4LHHDQH96F5bHDtQ5C7LNFKG6+Hu74px4QtNA0y17+k=";
+  npmDepsHash = "sha256-LaFzEhXQhwlNJkoZajUAglRMZJBTdwjuViobwhT6J5I=";
 }
