@@ -1,4 +1,4 @@
-{ buildNpmPackage, nodejs, card-metadata-json, card-images }:
+{ buildNpmPackage, nodejs, card-metadata-json, card-images, lib }:
 
 buildNpmPackage rec {
   pname = "frontend";
@@ -18,5 +18,5 @@ buildNpmPackage rec {
     ln -s $CARDS_IMAGE_FOLDER dependencies/card-images
   '';
 
-  npmDepsHash = "sha256-LaFzEhXQhwlNJkoZajUAglRMZJBTdwjuViobwhT6J5I=";
+  npmDepsHash = "sha256-gPWKEjG4jdMW8TvmzsuXBSpqkea/WImo8NdoAAGIUbY=";
 }
