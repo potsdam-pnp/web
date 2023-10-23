@@ -40,14 +40,14 @@ export class CardSelector extends React.Component<CardSelectorProps, CardSelecto
   }
 
   render() {
-    return React.createElement("div", { className: "d-flex" },
-      React.createElement("div", { className: "d-flex flex-column p-2 flex-shrink-0", style: { width: "15em" }},
+    return React.createElement("div", { className: "d-md-flex flex-md-row my-row" },
+      React.createElement("div", { className: "d-flex flex-column p-2 flex-shrink-0 my-col-6 flex-width-15"},
         React.createElement(CardTypeList, { cards: this.props.cards, selected: this.state.selectedType, onSelect: (cardType) => this.selectCardType(cardType) })
       ),
-      React.createElement("div", { className: "d-flex flex-column p-2 flex-shrink-0", style: { width: "15em" }},
+      React.createElement("div", { className: "d-flex flex-column p-2 flex-shrink-0 my-col-6 flex-width-15"},
         ...(this.state.selectedType ? [React.createElement(CardList, { cards: this.state.selectedType.cards, selected: this.state.selectedCard, onSelect: (card) => this.selectCard(card) })] : [])
       ),
-      React.createElement("div", { className: "d-flex flex-column p-2" },
+      React.createElement("div", { className: "d-flex flex-column p-2 my-col-12" },
         ...(this.state.selectedCard ? [React.createElement(Card, { card: this.state.selectedCard, addCard: (card: CardProperty) => this.addCard(card) })] : [])
       )
     );
@@ -65,7 +65,7 @@ class CardTypeList extends React.Component<CardTypeListProps> {
     const nonActiveClassList = "list-group-item justify-content-between d-flex list-group-item-action fw-bold";
     const activeClassList = nonActiveClassList + " active";
     const classList = (card: CardType) => card === this.props.selected ? activeClassList : nonActiveClassList;
-    return React.createElement("ul", { className: "list-group overflow-auto",  style: {maxHeight: "620px"}},
+    return React.createElement("ul", { className: "list-group overflow-auto card-list-height" },
       ...this.props.cards.map(card =>
         React.createElement("li", { className: classList(card), onClick: () => this.props.onSelect(card)},
           card.type,
@@ -89,7 +89,7 @@ class CardList extends React.Component<CardListProps> {
     const nonActiveClassList = "list-group-item justify-content-between d-flex list-group-item-action";
     const activeClassList = nonActiveClassList + " active";
     const classList = (card: CardProperty | null) => card === this.props.selected ? activeClassList : nonActiveClassList;
-    return React.createElement("ul", { className: "list-group overflow-auto",  style: {maxHeight: "620px"}},
+    return React.createElement("ul", { className: "list-group overflow-auto card-list-height"},
       ...this.props.cards.map(card =>
         React.createElement("li", { className: classList(card), onClick: () => this.props.onSelect(card)},
           card.title
