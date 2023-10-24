@@ -1,4 +1,5 @@
-export interface CardProperty {
+
+export interface Card {
   title: string;
   type: string;
   level: number;
@@ -7,5 +8,10 @@ export interface CardProperty {
 
 export interface CardType {
   type: string;
-  cards: CardProperty[];
+  cards: Card[];
+}
+
+export interface CardDeck {
+  name: string;
+  cards: Card[];
 }

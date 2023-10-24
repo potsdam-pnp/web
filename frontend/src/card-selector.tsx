@@ -1,15 +1,15 @@
 import * as React from 'react'
-import { CardProperty, CardType } from "./card"
+import { Card, CardType } from "./card"
 
 interface CardSelectorProps {
   /** The text to display inside the button */
   cards: CardType[];
-  selectCard: (card: CardProperty) => void;
+  selectCard: (card: Card) => void;
 }
 
 interface CardSelectorState {
   selectedType: CardType | null;
-  selectedCard: CardProperty | null;
+  selectedCard: Card | null;
 }
 
 export class CardSelector extends React.Component<CardSelectorProps, CardSelectorState> {
@@ -28,14 +28,14 @@ export class CardSelector extends React.Component<CardSelectorProps, CardSelecto
     });
   }
 
-  selectCard(card: CardProperty) {
+  selectCard(card: Card) {
     this.setState({
       selectedType: this.state.selectedType,
       selectedCard: card
     });
   }
 
-  addCard(card: CardProperty) {
+  addCard(card: Card) {
     return this.props.selectCard(card);
   }
 
@@ -48,7 +48,7 @@ export class CardSelector extends React.Component<CardSelectorProps, CardSelecto
         ...(this.state.selectedType ? [React.createElement(CardList, { cards: this.state.selectedType.cards, selected: this.state.selectedCard, onSelect: (card) => this.selectCard(card) })] : [])
       ),
       React.createElement("div", { className: "d-flex flex-column p-2 my-col-12" },
-        ...(this.state.selectedCard ? [React.createElement(Card, { card: this.state.selectedCard, addCard: (card: CardProperty) => this.addCard(card) })] : [])
+        ...(this.state.selectedCard ? [React.createElement(ShowCard, { card: this.state.selectedCard, addCard: (card: Card) => this.addCard(card) })] : [])
       )
     );
   }
@@ -79,16 +79,16 @@ class CardTypeList extends React.Component<CardTypeListProps> {
 }
 
 interface CardListProps {
-  cards: CardProperty[];
-  selected: CardProperty | null;
-  onSelect: (card: CardProperty) => void;
+  cards: Card[];
+  selected: Card | null;
+  onSelect: (card: Card) => void;
 }
 
 class CardList extends React.Component<CardListProps> {
   render() {
     const nonActiveClassList = "list-group-item justify-content-between d-flex list-group-item-action";
     const activeClassList = nonActiveClassList + " active";
-    const classList = (card: CardProperty | null) => card === this.props.selected ? activeClassList : nonActiveClassList;
+    const classList = (card: Card | null) => card === this.props.selected ? activeClassList : nonActiveClassList;
     return React.createElement("ul", { className: "list-group overflow-auto card-list-height"},
       ...this.props.cards.map(card =>
         React.createElement("li", { className: classList(card), onClick: () => this.props.onSelect(card)},
@@ -101,8 +101,8 @@ class CardList extends React.Component<CardListProps> {
 
 
 interface CardInterface {
-  card: CardProperty;
-  addCard: (card: CardProperty) => void;
+  card: Card;
+  addCard: (card: Card) => void;
 }
 
 interface CardState {
@@ -111,7 +111,7 @@ interface CardState {
 
 const cardImages = (import.meta as any).glob("../dependencies/card-images/*.png");
 
-class Card extends React.Component<CardInterface, CardState> {
+class ShowCard extends React.Component<CardInterface, CardState> {
   constructor(props: CardInterface) {
     super(props);
     this.state = {};

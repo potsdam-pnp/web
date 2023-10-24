@@ -1,11 +1,6 @@
 import * as React from "react";
-import { CardProperty } from "./card";
+import { CardDeck } from "./card";
 import { Modal } from "bootstrap";
-
-interface CardDeck {
-  name: string;
-  cards: CardProperty[];
-}
 
 interface CardDecksProps {
   decks: CardDeck[];
