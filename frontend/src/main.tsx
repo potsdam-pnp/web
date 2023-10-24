@@ -1,4 +1,4 @@
-import { StrictMode, useContext } from 'react'
+import { StrictMode, useContext, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { CardSelector } from './views/card-selector';
 import { CardDecks } from './views/card-decks';
@@ -15,14 +15,30 @@ function Share() {
   url.hash = base64;
   const urlStr = url.toString();
 
+  const [ succesfullyCopied, setSuccesfullyCopied ] = useState(false);
+
   function onClick() {
-    navigator.share({
-      url: urlStr
+    navigator.clipboard.writeText(urlStr).then(_ => {
+      setSuccesfullyCopied(true);
+      setTimeout(() => setSuccesfullyCopied(false), 3000);
     });
   }
 
-  return <div className="py-3">Share current page content:
-    <button type="button" className="btn btn-success" onClick={onClick}>Share</button>
+  return <div className="input-group my-3">
+    <span className="input-group-text">Share card decks</span>
+    <input type="text" className="form-control" value={urlStr} disabled={true}></input>
+    <button className={"btn " + (succesfullyCopied ? "btn-outline-success" : "btn-outline-secondary")} type="button" onClick={onClick}>Copy to clipboard</button>
+    <div className="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+      <div className={"toast text-bg-success" + (succesfullyCopied ? " show" : "")} role="alert" aria-live="assertive" aria-atomic="true">
+        <div className="toast-header">
+          <strong className="me-auto">Success</strong>
+          <button type="button" className="btn-close" onClick={() => setSuccesfullyCopied(false)} aria-label="Close"></button>
+        </div>
+        <div className="toast-body">
+          Successfully copied url to clipboard.
+        </div>
+      </div>
+    </div>
   </div>;
 }
 
