@@ -1,53 +1,28 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { CardSelector } from './card-selector';
-import { CardDecks } from './card-decks';
-import { Card, CardType } from './card';
+import { StrictMode, useContext } from 'react'
+import { createRoot } from 'react-dom/client'
+import { CardSelector } from './views/card-selector';
+import { CardDecks } from './views/card-decks';
+import loadCardMetadata from './lib/load-card-metadata';
 
 import './scss/styles.scss'
-import cardMetadata from '../dependencies/card-metadata.json';
-
-function constructAllCards(): CardType[] {
-  const types: {[type: string]: Card[]} = {};
-
-  for (const key in cardMetadata) {
-    const card: Card = (cardMetadata as any)[key];
-    if (card.type == "") continue;
-    if (!types[card.type]) {
-      types[card.type] = [];
-    }
-    card.page = key;
-    types[card.type].push(card);
-  }
-
-  const result: CardType[] = [];
-  for (const key in types) {
-    result.push({
-      type: key,
-      cards: types[key]
-    });
-  }
-
-  return result;
-}
+import { CardDeckDispatchContext, CardDeckState } from './views/card-deck-context';
+import { ShowErrors } from './views/show-errors';
 
 function App() {
-  const selectCard = (card: Card) => {
-    // TODO
-    console.log("add card", card.title);
-  };
+  const dispatch = useContext(CardDeckDispatchContext);
 
   return (
-    <div className="container py-4 px-3 mx-auto">
-      <h1>Building card decks</h1>
-      <CardSelector cards={constructAllCards()} selectCard={selectCard} />
-      <CardDecks decks={[]} selected={null} />
-    </div>
+      <div className="container py-4 px-3 mx-auto">
+        <h1>Building card decks</h1>
+        <ShowErrors />
+        <CardSelector cards={loadCardMetadata()} selectCard={card => dispatch({ type: "add-card", card: card })} />
+        <CardDecks />
+      </div>
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-      <App />
-  </React.StrictMode>,
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+     <CardDeckState><App /></CardDeckState>
+  </StrictMode>,
 );

@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { Card, CardType } from "./card"
+import { Card, CardType } from "../lib/card"
+import { ShowCard } from './show-card';
 
 interface CardSelectorProps {
   /** The text to display inside the button */
@@ -36,10 +37,20 @@ export class CardSelector extends React.Component<CardSelectorProps, CardSelecto
   }
 
   addCard(card: Card) {
-    return this.props.selectCard(card);
+    this.props.selectCard(card);
   }
 
   render() {
+    let showCard;
+    if (this.state.selectedCard) {
+      const selectedCard = this.state.selectedCard;
+      showCard = <ShowCard card={selectedCard}>
+        <button className="btn btn-success" onClick={() => this.addCard(selectedCard)}>Add</button>
+      </ShowCard>
+    } else {
+      showCard = <></>
+    }
+
     return React.createElement("div", { className: "d-md-flex flex-md-row my-row" },
       React.createElement("div", { className: "d-flex flex-column p-2 flex-shrink-0 my-col-6 flex-width-15"},
         React.createElement(CardTypeList, { cards: this.props.cards, selected: this.state.selectedType, onSelect: (cardType) => this.selectCardType(cardType) })
@@ -47,9 +58,7 @@ export class CardSelector extends React.Component<CardSelectorProps, CardSelecto
       React.createElement("div", { className: "d-flex flex-column p-2 flex-shrink-0 my-col-6 flex-width-15"},
         ...(this.state.selectedType ? [React.createElement(CardList, { cards: this.state.selectedType.cards, selected: this.state.selectedCard, onSelect: (card) => this.selectCard(card) })] : [])
       ),
-      React.createElement("div", { className: "d-flex flex-column p-2 my-col-12" },
-        ...(this.state.selectedCard ? [React.createElement(ShowCard, { card: this.state.selectedCard, addCard: (card: Card) => this.addCard(card) })] : [])
-      )
+      React.createElement("div", { className: "d-flex flex-column p-2 my-col-12" }, showCard)
     );
   }
 }
@@ -96,59 +105,5 @@ class CardList extends React.Component<CardListProps> {
         )
       )
     );
-  }
-}
-
-
-interface CardInterface {
-  card: Card;
-  addCard: (card: Card) => void;
-}
-
-interface CardState {
-  [page: string]: string
-}
-
-const cardImages = (import.meta as any).glob("../dependencies/card-images/*.png");
-
-class ShowCard extends React.Component<CardInterface, CardState> {
-  constructor(props: CardInterface) {
-    super(props);
-    this.state = {};
-  }
-
-  addCard() {
-    this.props.addCard(this.props.card);
-  }
-
-  render() {
-    if (this.state[this.props.card.page]) {
-      const { title, type, level } = this.props.card;
-      return React.createElement("div", {className: "card"},
-          React.createElement("img", { src: this.state[this.props.card.page], className: "card-img-top", alt: "Card image"}),
-          React.createElement("div", { className: "card-body d-flex flex-row justify-content-between"},
-            React.createElement("div", {},
-              React.createElement("h5", { className: "card-title" }, title),
-              React.createElement("p", { className: "card-subtitle mb-2 text-body-secondary" },
-                type, " ", level
-              )
-            ),
-            React.createElement("div", {}, 
-              React.createElement("button", { type: "button", className: "btn btn-success", onClick: () => this.addCard() },
-                "Add"
-              )
-            )
-          ) 
-        );
-    } else {
-      const page = this.props.card.page;
-      cardImages["../dependencies/card-images/" + page + ".png"]().then((result: any) => {
-        this.setState({
-          ...this.state,
-          [page]: result.default
-        });
-      });
-      return "Loading";
-    }
   }
 }
