@@ -5,8 +5,26 @@ import { CardDecks } from './views/card-decks';
 import loadCardMetadata from './lib/load-card-metadata';
 
 import './scss/styles.scss'
-import { CardDeckDispatchContext, CardDeckState } from './views/card-deck-context';
+import { CardDeckContext, CardDeckDispatchContext, CardDeckState } from './views/card-deck-context';
 import { ShowErrors } from './views/show-errors';
+
+function Share() {
+  const state = useContext(CardDeckContext);
+  const base64 = btoa(JSON.stringify(state));
+  const url = new URL(window.location.href);
+  url.hash = base64;
+  const urlStr = url.toString();
+
+  function onClick() {
+    navigator.share({
+      url: urlStr
+    });
+  }
+
+  return <div className="py-3">Share current page content:
+    <button type="button" className="btn btn-success" onClick={onClick}>Share</button>
+  </div>;
+}
 
 function App() {
   const dispatch = useContext(CardDeckDispatchContext);
@@ -17,6 +35,7 @@ function App() {
         <ShowErrors />
         <CardSelector cards={loadCardMetadata()} selectCard={card => dispatch({ type: "add-card", card: card })} />
         <CardDecks />
+        <Share />
       </div>
   );
 }
