@@ -8,59 +8,33 @@ interface CardSelectorProps {
   selectCard: (card: Card) => void;
 }
 
-interface CardSelectorState {
-  selectedType: CardType | null;
-  selectedCard: Card | null;
-}
+export function CardSelector({cards, selectCard}: CardSelectorProps) {
+  const [selectedType, setSelectedType] = React.useState<CardType | null>(null);
+  const [selectedCard, setSelectedCard] = React.useState<Card | null>(null);
 
-export class CardSelector extends React.Component<CardSelectorProps, CardSelectorState> {
-  constructor(props: CardSelectorProps) {
-    super(props);
-    this.state = {
-      selectedType: null,
-      selectedCard: null
-    }
+  function selectCardType(cardType: CardType) {
+    setSelectedType(cardType);
+    setSelectedCard(null);
   }
 
-  selectCardType(cardType: CardType) {
-    this.setState({
-        selectedType: cardType,
-        selectedCard: null
-    });
+  let showCard;
+  if (selectedCard) {
+    showCard = <ShowCard card={selectedCard}>
+      <button className="btn btn-success" onClick={() => selectCard(selectedCard)}>Add</button>
+    </ShowCard>
+  } else {
+    showCard = <></>
   }
 
-  selectCard(card: Card) {
-    this.setState({
-      selectedType: this.state.selectedType,
-      selectedCard: card
-    });
-  }
-
-  addCard(card: Card) {
-    this.props.selectCard(card);
-  }
-
-  render() {
-    let showCard;
-    if (this.state.selectedCard) {
-      const selectedCard = this.state.selectedCard;
-      showCard = <ShowCard card={selectedCard}>
-        <button className="btn btn-success" onClick={() => this.addCard(selectedCard)}>Add</button>
-      </ShowCard>
-    } else {
-      showCard = <></>
-    }
-
-    return React.createElement("div", { className: "d-md-flex flex-md-row my-row" },
-      React.createElement("div", { className: "d-flex flex-column p-2 flex-shrink-0 my-col-6 flex-width-15"},
-        React.createElement(CardTypeList, { cards: this.props.cards, selected: this.state.selectedType, onSelect: (cardType) => this.selectCardType(cardType) })
-      ),
-      React.createElement("div", { className: "d-flex flex-column p-2 flex-shrink-0 my-col-6 flex-width-15"},
-        ...(this.state.selectedType ? [React.createElement(CardList, { cards: this.state.selectedType.cards, selected: this.state.selectedCard, onSelect: (card) => this.selectCard(card) })] : [])
-      ),
-      React.createElement("div", { className: "d-flex flex-column p-2 my-col-12" }, showCard)
-    );
-  }
+  return React.createElement("div", { className: "d-md-flex flex-md-row my-row" },
+    React.createElement("div", { className: "d-flex flex-column p-2 flex-shrink-0 my-col-6 flex-width-15"},
+      React.createElement(CardTypeList, { cards: cards, selected: selectedType, onSelect: (cardType) => selectCardType(cardType) })
+    ),
+    React.createElement("div", { className: "d-flex flex-column p-2 flex-shrink-0 my-col-6 flex-width-15"},
+      ...(selectedType ? [React.createElement(CardList, { cards: selectedType.cards, selected: selectedCard, onSelect: (card) => setSelectedCard(card) })] : [])
+    ),
+    React.createElement("div", { className: "d-flex flex-column p-2 my-col-12" }, showCard)
+  );
 }
 
 interface CardTypeListProps {
