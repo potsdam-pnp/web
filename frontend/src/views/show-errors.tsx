@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Alert } from "react-bootstrap";
 import { CardDeckContext, CardDeckDispatchContext } from "./card-deck-context";
 
 export function ShowErrors() {
@@ -7,10 +8,9 @@ export function ShowErrors() {
 
   return <div>
     {errors.map((value, index) => 
-      <div className="alert alert-danger d-flex justify-content-between" key={index} role="alert">
+      <Alert variant="danger" onClose={() => dispatch({type: "dismiss-error", index: index})} dismissible key={index}>
         {value}
-        <button type="button" className="btn-close" aria-label="Close" onClick={() => dispatch({type: "dismiss-error", index: index})}>
-        </button>
-      </div>)}
+      </Alert>
+    )}
   </div>;
 }
