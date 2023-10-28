@@ -4,9 +4,11 @@ import { CardSelector } from './views/card-selector';
 import { CardDecks } from './views/card-decks';
 import loadCardMetadata from './lib/load-card-metadata';
 
+
 import './scss/styles.scss'
 import { CardDeckContext, CardDeckDispatchContext, CardDeckState } from './views/card-deck-context';
 import { ShowErrors } from './views/show-errors';
+import { Button, Form, InputGroup, ToastContainer, Toast } from 'react-bootstrap';
 
 function Share() {
   const state = useContext(CardDeckContext);
@@ -24,22 +26,23 @@ function Share() {
     });
   }
 
-  return <div className="input-group my-3">
-    <span className="input-group-text">Share card decks</span>
-    <input type="text" className="form-control" value={urlStr} disabled={true}></input>
-    <button className={"btn " + (succesfullyCopied ? "btn-outline-success" : "btn-outline-secondary")} type="button" onClick={onClick}>Copy to clipboard</button>
-    <div className="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
-      <div className={"toast text-bg-success" + (succesfullyCopied ? " show" : "")} role="alert" aria-live="assertive" aria-atomic="true">
-        <div className="toast-header">
-          <strong className="me-auto">Success</strong>
-          <button type="button" className="btn-close" onClick={() => setSuccesfullyCopied(false)} aria-label="Close"></button>
-        </div>
-        <div className="toast-body">
-          Successfully copied url to clipboard.
-        </div>
-      </div>
-    </div>
-  </div>;
+  return <InputGroup className="my-3">
+      <InputGroup.Text>Share card decks</InputGroup.Text>
+      <Form.Control type="text" disabled={true} value={urlStr} />
+      <Button variant={ succesfullyCopied ? "outline-success" : "outline-secondary" } onClick={onClick}>
+        Copy to clipboard
+      </Button>
+      <ToastContainer position="top-center" containerPosition="fixed" className="p-3">
+        <Toast bg="success" show={succesfullyCopied} onClose={() => setSuccesfullyCopied(false)}>
+          <Toast.Header>
+            <strong className="me-auto">Success</strong>
+          </Toast.Header>
+          <Toast.Body>
+            Successfully copied url to clipboard.
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
+    </InputGroup>;
 }
 
 function App() {
