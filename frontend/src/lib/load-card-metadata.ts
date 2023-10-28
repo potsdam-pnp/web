@@ -1,4 +1,4 @@
-import cardMetadata from '../../dependencies/card-metadata.json';
+import cardMetadata from '../../dependencies/card-metadata.js';
 import { Card, CardType } from './card';
 
 export default function (): CardType[] {

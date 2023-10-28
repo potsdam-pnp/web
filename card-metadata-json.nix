@@ -1,13 +1,13 @@
 { runCommand, cards, nodejs, writeText }:
 
-runCommand "pf2e-card-metadata.json" {
+runCommand "pf2e-card-metadata.ts" {
   metadataFile = "${cards}/metadata.txt";
   program = writeText "metadata-to-json.js" ''
     const fs = require("fs").promises;
     async function main() {
       const content = await fs.readFile(process.argv[2], "utf8");
       let started = false; let insideStarted = false;
-      process.stdout.write("{");
+      process.stdout.write("export default {");
       for (const line of content.split("\n")) {
         const index = line.indexOf("=");
         const first = line.substring(0, index);

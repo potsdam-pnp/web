@@ -15,7 +15,7 @@ buildNpmPackage rec {
 
   postPatch = ''
     mkdir dependencies
-    ln -s $CARDS_METADATA_JSON_FILE dependencies/card-metadata.json
+    ln -s $CARDS_METADATA_JSON_FILE dependencies/card-metadata.ts
     ln -s $CARDS_IMAGE_FOLDER dependencies/card-images
     echo "export default \"$PF2E_CARDS_REV\"" > dependencies/revision.ts
   '';
