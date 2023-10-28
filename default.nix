@@ -1,4 +1,4 @@
-{ buildNpmPackage, nodejs, card-metadata-json, card-images, lib }:
+{ buildNpmPackage, nodejs, card-metadata-json, card-images, lib, pf2e-cards-rev }:
 
 buildNpmPackage rec {
   pname = "frontend";
@@ -9,6 +9,7 @@ buildNpmPackage rec {
 
   CARDS_METADATA_JSON_FILE = card-metadata-json;
   CARDS_IMAGE_FOLDER = card-images;
+  PF2E_CARDS_REV = pf2e-cards-rev;
 
   src = ./frontend;
 
@@ -16,6 +17,7 @@ buildNpmPackage rec {
     mkdir dependencies
     ln -s $CARDS_METADATA_JSON_FILE dependencies/card-metadata.json
     ln -s $CARDS_IMAGE_FOLDER dependencies/card-images
+    echo "export default \"$PF2E_CARDS_REV\"" > dependencies/revision.ts
   '';
 
   npmDepsHash = "sha256-jWPTLnVxZe3KVMVQcUq0GUiiiyC+pj59/KSAybCDL3w=";
