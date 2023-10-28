@@ -8,7 +8,7 @@ import loadCardMetadata from './lib/load-card-metadata';
 import './scss/styles.scss'
 import { CardDeckContext, CardDeckDispatchContext, CardDeckState } from './views/card-deck-context';
 import { ShowErrors } from './views/show-errors';
-import { Button, Form, InputGroup, ToastContainer, Toast } from 'react-bootstrap';
+import { Button, Form, InputGroup, ToastContainer, Toast, Container } from 'react-bootstrap';
 
 function Share() {
   const state = useContext(CardDeckContext);
@@ -49,13 +49,13 @@ function App() {
   const dispatch = useContext(CardDeckDispatchContext);
 
   return (
-      <div className="container py-4 px-3 mx-auto">
+      <Container className="py-4 px-3 mx-auto">
         <h1>Building card decks</h1>
         <ShowErrors />
         <CardSelector cards={loadCardMetadata()} selectCard={card => dispatch({ type: "add-card", card: card })} />
         <CardDecks />
         <Share />
-      </div>
+      </Container>
   );
 }
 

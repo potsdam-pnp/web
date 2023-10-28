@@ -1,4 +1,5 @@
-import { createElement, ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
+import { Card as BCard } from "react-bootstrap";
 import { Card } from "../lib/card";
 
 let cardSources: Record<string, string> = {};
@@ -12,26 +13,23 @@ export function ShowCard({card, children}: {card: Card, children: ReactNode}) {
     return;
   }
 
-  if (src[card.page]) {
-    const { title, type, level } = card;
-    return createElement("div", {className: "card"},
-        createElement("img", { src: src[card.page], className: "card-img-top", alt: "Card image"}),
-        createElement("div", { className: "card-body d-flex flex-row justify-content-between"},
-          createElement("div", {},
-            createElement("h5", { className: "card-title" }, title),
-            createElement("p", { className: "card-subtitle mb-2 text-body-secondary" },
-              type, " ", level
-            )
-          ),
-          createElement("div", {}, children)
-        ) 
-      );
-  } else {
+  if (!src[card.page]) {
     const page = card.page;
     cardImages["../../dependencies/card-images/" + page + ".png"]().then((result: any) => {
       cardSources[page] = result.default;
       setSrc({ [card.page]: result.default });
     });
-    return <>"Loading"</>;
   }
+
+  const { title, type, level } = card;
+  return <BCard>
+    <BCard.Img variant="top" src={src[card.page] || ""} />
+    <BCard.Body className="d-flex flex-row justify-content-between">
+      <div>
+        <BCard.Title>{title}</BCard.Title>
+        <BCard.Subtitle>{type} {level}</BCard.Subtitle>
+      </div>
+      {children}
+    </BCard.Body>
+  </BCard>
 }

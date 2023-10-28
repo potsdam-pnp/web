@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Badge, Button, ListGroup } from 'react-bootstrap';
 import { Card, CardType } from "../lib/card"
 import { ShowCard } from './show-card';
 
@@ -20,7 +21,7 @@ export function CardSelector({cards, selectCard}: CardSelectorProps) {
   let showCard;
   if (selectedCard) {
     showCard = <ShowCard card={selectedCard}>
-      <button className="btn btn-success" onClick={() => selectCard(selectedCard)}>Add</button>
+      <Button variant="success" onClick={() => selectCard(selectedCard)}>Add</Button>
     </ShowCard>
   } else {
     showCard = <></>
@@ -44,19 +45,14 @@ interface CardTypeListProps {
 }
 
 function CardTypeList({cards, selected, onSelect}: CardTypeListProps) {
-  const nonActiveClassList = "list-group-item justify-content-between d-flex list-group-item-action fw-bold";
-  const activeClassList = nonActiveClassList + " active";
-  const classList = (card: CardType) => card === selected ? activeClassList : nonActiveClassList;
-  return React.createElement("ul", { className: "list-group overflow-auto card-list-height" },
-    ...cards.map(card =>
-      React.createElement("li", { className: classList(card), onClick: () => onSelect(card)},
-        card.type,
-        React.createElement("span", { className: "badge bg-secondary rounded-pill" }, 
-          card.cards.length
-        )
-      )
-    )
-  );
+  return <ListGroup className="overflow-auto card-list-height">
+    {cards.map(card =>
+      <ListGroup.Item action className="justify-content-between d-flex fw-bold" active={card === selected} onClick={() => onSelect(card)}>
+        {card.type}
+        <Badge bg="secondary" pill>{card.cards.length}</Badge>
+      </ListGroup.Item>
+    )}
+  </ListGroup>
 }
 
 interface CardListProps {
@@ -66,14 +62,11 @@ interface CardListProps {
 }
 
 function CardList  ({ cards, onSelect, selected}: CardListProps) {
-  const nonActiveClassList = "list-group-item justify-content-between d-flex list-group-item-action";
-  const activeClassList = nonActiveClassList + " active";
-  const classList = (card: Card | null) => card === selected ? activeClassList : nonActiveClassList;
-  return React.createElement("ul", { className: "list-group overflow-auto card-list-height"},
-    ...cards.map(card =>
-      React.createElement("li", { className: classList(card), onClick: () => onSelect(card)},
-        card.title
-      )
-    )
-  );
+  return <ListGroup className="overflow-auto card-list-height">
+    {cards.map(card =>
+      <ListGroup.Item className="justify-content-between d-flex" action active={card === selected} onClick={() => onSelect(card)}>
+        {card.title}
+      </ListGroup.Item>  
+    )}
+  </ListGroup>
 }
