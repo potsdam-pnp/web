@@ -43,22 +43,20 @@ interface CardTypeListProps {
   onSelect: (cardType: CardType) => void;
 }
 
-class CardTypeList extends React.Component<CardTypeListProps> {
-  render() {
-    const nonActiveClassList = "list-group-item justify-content-between d-flex list-group-item-action fw-bold";
-    const activeClassList = nonActiveClassList + " active";
-    const classList = (card: CardType) => card === this.props.selected ? activeClassList : nonActiveClassList;
-    return React.createElement("ul", { className: "list-group overflow-auto card-list-height" },
-      ...this.props.cards.map(card =>
-        React.createElement("li", { className: classList(card), onClick: () => this.props.onSelect(card)},
-          card.type,
-          React.createElement("span", { className: "badge bg-secondary rounded-pill" }, 
-            card.cards.length
-          )
+function CardTypeList({cards, selected, onSelect}: CardTypeListProps) {
+  const nonActiveClassList = "list-group-item justify-content-between d-flex list-group-item-action fw-bold";
+  const activeClassList = nonActiveClassList + " active";
+  const classList = (card: CardType) => card === selected ? activeClassList : nonActiveClassList;
+  return React.createElement("ul", { className: "list-group overflow-auto card-list-height" },
+    ...cards.map(card =>
+      React.createElement("li", { className: classList(card), onClick: () => onSelect(card)},
+        card.type,
+        React.createElement("span", { className: "badge bg-secondary rounded-pill" }, 
+          card.cards.length
         )
       )
-    );
-  }
+    )
+  );
 }
 
 interface CardListProps {
@@ -67,17 +65,15 @@ interface CardListProps {
   onSelect: (card: Card) => void;
 }
 
-class CardList extends React.Component<CardListProps> {
-  render() {
-    const nonActiveClassList = "list-group-item justify-content-between d-flex list-group-item-action";
-    const activeClassList = nonActiveClassList + " active";
-    const classList = (card: Card | null) => card === this.props.selected ? activeClassList : nonActiveClassList;
-    return React.createElement("ul", { className: "list-group overflow-auto card-list-height"},
-      ...this.props.cards.map(card =>
-        React.createElement("li", { className: classList(card), onClick: () => this.props.onSelect(card)},
-          card.title
-        )
+function CardList  ({ cards, onSelect, selected}: CardListProps) {
+  const nonActiveClassList = "list-group-item justify-content-between d-flex list-group-item-action";
+  const activeClassList = nonActiveClassList + " active";
+  const classList = (card: Card | null) => card === selected ? activeClassList : nonActiveClassList;
+  return React.createElement("ul", { className: "list-group overflow-auto card-list-height"},
+    ...cards.map(card =>
+      React.createElement("li", { className: classList(card), onClick: () => onSelect(card)},
+        card.title
       )
-    );
-  }
+    )
+  );
 }
