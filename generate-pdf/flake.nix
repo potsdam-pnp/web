@@ -7,7 +7,7 @@
       pages = {
         flake = false;
         type = "file";
-        url = "https://raw.githubusercontent.com/potsdam-pnp/web/main/frontend/generate-pdf/pages";
+        url = "https://raw.githubusercontent.com/potsdam-pnp/web/main/generate-pdf/pages";
       };
   };
 
