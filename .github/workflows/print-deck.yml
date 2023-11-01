@@ -24,7 +24,7 @@ jobs:
       run: |
         IFS=: read -r ref pages <<< "${{inputs.input}}"
         echo "$pages" > pages
-        nix build github:potsdam-pnp/generate-pdf --override-input pf2e-cards github:potsdam-pnp/pf2e-cards/$ref --override-input pages pages --out-link cards.pdf
+        nix build github:potsdam-pnp/web?dir=generate-pdf --override-input pf2e-cards github:potsdam-pnp/pf2e-cards/$ref --override-input pages pages --out-link cards.pdf
     - name: Archive a4paper.pdf
       uses: actions/upload-artifact@v3
       with:
