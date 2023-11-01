@@ -42,16 +42,24 @@ function updateSelectedDeck(state: State, updateFun: (deck: CardDeck) => CardDec
   }
 }
 
+function addNewDeck(state: State, deck: CardDeck): State {
+  if (state.decks.find(d => d.name === deck.name)) {
+    return addError(state, `Card deck with name ${deck.name} already exists`);
+  } else {
+    return {
+      ...state,
+      decks: state.decks.concat(deck)
+    }
+  }
+}
+
 export function reduce(state: State, action: Action): State {
   switch (action.type) {
     case "add-deck":
-      return {
-        ...state,
-        decks: state.decks.concat({
-          cards: [],
-          name: action.name
-        })
-      };
+      return addNewDeck(state, {
+        cards: [],
+        name: action.name
+      });
     case "add-card":
       const card = action.card;
       function addCardToDeck(deck: CardDeck) {
@@ -88,11 +96,10 @@ export function reduce(state: State, action: Action): State {
       }
     case "card-deck-import":
       if (state.currentlyImporting) {
-        return {
+        return addNewDeck({
           ...state,
-          decks: state.decks.concat(state.currentlyImporting),
           currentlyImporting: null
-        }
+        }, state.currentlyImporting);
       } else {
         return addError(state, "importing non-existing card deck");
       }
