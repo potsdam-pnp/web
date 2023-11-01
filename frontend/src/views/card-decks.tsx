@@ -1,7 +1,7 @@
 import * as React from "react";
 import { CardDeckContext, CardDeckDispatchContext } from "./card-deck-context";
 import { ShowCard } from "./show-card";
-import { ButtonGroup, Button, Modal, Form, InputGroup } from "react-bootstrap";
+import { ButtonGroup, Button, Modal, Form, InputGroup, ToastContainer, Toast } from "react-bootstrap";
 import { CardDeck } from "../lib/card";
 import revision from "../../dependencies/revision";
 
@@ -76,6 +76,7 @@ function CardDeckC() {
         <h1>Deck {deck.name}</h1>
         <p>This deck consists of {deck.cards.length} cards</p>
         <PrintDeck deck={deck} />
+        <ShareDeck deck={deck} />
         <div className="row">
           {deck.cards.map(card => <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-lg-xl-2 py-3">
             <ShowCard card={card}><span></span></ShowCard>
@@ -117,5 +118,36 @@ function PrintDeck({deck}: {deck: CardDeck}) {
       </Modal.Footer>
     </Modal>
     <Button disabled={deck.cards.length===0} onClick={() => setCurrentlyPrinting(true)}>Print this deck</Button>
+  </>;
+}
+
+function ShareDeck({deck}: {deck: CardDeck}) {
+  const [recentlyCopied, setRecentlyCopied] = React.useState(false);
+  const [url, setUrl] = React.useState("");
+  
+  function shareDeck() {
+    const url = new URL(window.location.href);
+    const cards = btoa(JSON.stringify(deck.cards));
+    url.hash = "?shareDeck=" + encodeURIComponent(deck.name) + "&" + encodeURIComponent(cards);
+    const urlStr = url.toString();
+    setUrl(urlStr);
+    navigator.clipboard.writeText(urlStr);
+    setRecentlyCopied(true);
+    setTimeout(() => setRecentlyCopied(false), 2000);
+  }
+  
+  return <>
+    <ToastContainer position="top-center" containerPosition="fixed" className="p-3">
+      <Toast bg="success" show={recentlyCopied} onClose={() => setRecentlyCopied(false)}>
+        <Toast.Header>
+          <strong className="me-auto">Success</strong>
+        </Toast.Header>
+        <Toast.Body>
+          Successfully copied url to clipboard. <br />
+          {url.substring(0, 50) + "..."}
+        </Toast.Body>
+      </Toast>
+    </ToastContainer>
+    <Button className="mx-2" disabled={deck.cards.length===0} onClick={shareDeck}>Share this deck</Button>
   </>;
 }

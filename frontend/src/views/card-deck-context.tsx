@@ -4,17 +4,32 @@ import * as ManageCardDecks from "../lib/manage-card-decks";
 export const CardDeckContext = createContext(ManageCardDecks.emptyState);
 export const CardDeckDispatchContext = createContext((_: ManageCardDecks.Action) => {});
 
+let initialHash = window.location.hash;
+
+
 function initialState() {
-  if (window.location.hash.length > 5) {
-    const str = atob(window.location.hash.slice(1));
+  if (initialHash.length > 5 && initialHash[1] != "?") {
+    const str = atob(initialHash.slice(1));
+    window.history.replaceState(undefined, "", "/");
     return JSON.parse(str) as ManageCardDecks.State;
   } else {
     const cardDecks = window.localStorage.getItem("card-decks");
+    let result;
     if (cardDecks) {
-      return ManageCardDecks.loadState(cardDecks);
+      result = ManageCardDecks.loadState(cardDecks);
     } else {
-      return ManageCardDecks.emptyState;
+      result = ManageCardDecks.emptyState;
     }
+    if (initialHash.startsWith("#?shareDeck=")) {
+      const content = initialHash.substring(12);
+      const [name1, content1] = content.split("&");
+      const name = decodeURIComponent(name1);
+      const json = atob(decodeURIComponent(content1))
+      const cards = JSON.parse(json);
+      result = ManageCardDecks.reduce(result, { type: "import-deck", name, cards });
+    }
+    window.history.replaceState(undefined, "", "/");
+    return result;
   }
 }
 

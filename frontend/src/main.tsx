@@ -9,6 +9,7 @@ import './scss/styles.scss'
 import { CardDeckContext, CardDeckDispatchContext, CardDeckState } from './views/card-deck-context';
 import { ShowErrors } from './views/show-errors';
 import { Button, Form, InputGroup, ToastContainer, Toast, Container } from 'react-bootstrap';
+import { ImportDialog } from './views/import-dialog';
 
 function Share() {
   const state = useContext(CardDeckContext);
@@ -52,6 +53,7 @@ function App() {
       <Container className="py-4 px-3 mx-auto">
         <h1>Building card decks</h1>
         <ShowErrors />
+        <ImportDialog />
         <CardSelector cards={loadCardMetadata()} selectCard={card => dispatch({ type: "add-card", card: card })} />
         <CardDecks />
         <Share />

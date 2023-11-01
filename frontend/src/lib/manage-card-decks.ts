@@ -4,6 +4,7 @@ export interface State {
   decks: CardDeck[];
   selectedDeck: string | null;
   errors: string[];
+  currentlyImporting: CardDeck | null;
 }
 
 export type Action = 
@@ -11,7 +12,10 @@ export type Action =
   | { type: "select-deck", deck: CardDeck }
   | { type: "add-card", card: Card }
   | { type: "remove-card", card: Card }
-  | { type: "dismiss-error", index: number };
+  | { type: "dismiss-error", index: number }
+  | { type: "import-deck", name: string, cards: Card[] }
+  | { type: "card-deck-import" }
+  | { type: "card-deck-import-dismiss" };
 
 
 function addError(state: State, error: string): State {
@@ -69,13 +73,37 @@ export function reduce(state: State, action: Action): State {
           ...state,
           selectedDeck: action.deck.name
         }
+    case "import-deck":
+        return {
+          ...state,
+          currentlyImporting: {
+            name: action.name,
+            cards: action.cards
+          }
+        }
+    case "card-deck-import-dismiss":
+      return {
+        ...state,
+        currentlyImporting: null
+      }
+    case "card-deck-import":
+      if (state.currentlyImporting) {
+        return {
+          ...state,
+          decks: state.decks.concat(state.currentlyImporting),
+          currentlyImporting: null
+        }
+      } else {
+        return addError(state, "importing non-existing card deck");
+      }
   }
 }
 
 export const emptyState: State = {
   decks: [],
   errors: [],
-  selectedDeck: null
+  selectedDeck: null,
+  currentlyImporting: null
 }
 
 export function loadState(storage: string): State {
