@@ -1,0 +1,32 @@
+name: Print card deck
+on:
+  workflow_dispatch:
+    inputs:
+      input:
+        description: Input to be printed
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  compile:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: cachix/install-nix-action@v22
+      with:
+        extra_nix_config: "log-lines = 300"
+    - uses: cachix/cachix-action@v12
+      with:
+        name: potsdam-pnp
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    - name: Compile LaTeX document
+      run: |
+        IFS=. read -r ref pages <<< "${{inputs.input}}"
+        echo "$pages" > pages
+        nix build github:potsdam-pnp/generate-pdf --override-input pf2e-cards github:potsdam-pnp/pf2e-cards/$ref --override-input pages pages --out-link cards.pdf
+    - name: Archive a4paper.pdf
+      uses: actions/upload-artifact@v3
+      with:
+        name: cards
+        path: cards.pdf

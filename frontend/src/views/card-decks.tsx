@@ -98,17 +98,13 @@ function PrintDeck({deck}: {deck: CardDeck}) {
       <Modal.Body>
         To print a card deck, you need to follow a few steps.
         <ol className="py-1">
-          <li className="py-1">Go to <a href="https://github.com/potsdam-pnp/pf2e-cards/actions/workflows/print-deck.yml" target="_blank">https://github.com/potsdam-pnp/pf2e-cards/actions/workflows/print-deck.yml</a></li>
+          <li className="py-1">Go to <a href="https://github.com/potsdam-pnp/web/actions/workflows/print-deck.yml" target="_blank">https://github.com/potsdam-pnp/pf2e-cards/actions/workflows/print-deck.yml</a></li>
           <li className="py-1">Click on <strong>Run workflow</strong></li>
           <li className="py-1">
-            <div className="mb-3">Copy content for <strong>Commit revision</strong> and <strong>Pages to be printed</strong> as follows:</div>
+            <div className="mb-3">Copy the following content into the <strong>input</strong> text field:</div>
           <InputGroup className="mb-3">
-            <InputGroup.Text>Commit revision</InputGroup.Text>
-            <Form.Control type="text" value={revision} readOnly onFocus={e => { e.target.select(); navigator.clipboard.writeText(revision); }} />
-          </InputGroup>
-          <InputGroup className="mb-3">
-            <InputGroup.Text>Pages to be printed</InputGroup.Text>
-            <Form.Control type="text" value={pages} readOnly onFocus={e => { e.target.select(); navigator.clipboard.writeText(pages); } } />
+            <InputGroup.Text>Input</InputGroup.Text>
+            <Form.Control type="text" value={revision + ":" + pages} readOnly onFocus={e => { e.target.select(); navigator.clipboard.writeText(revision); }} />
           </InputGroup>
         </li>
         <li className="py-1">Click on <strong>Run workflow</strong></li>
