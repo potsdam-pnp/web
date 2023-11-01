@@ -1,8 +1,8 @@
 {
   description = "generate-pdf";
     inputs = {
-      nixpkgs.url = "github:NixOS/nixpkgs/release-23.05";
-      flake-utils.url = "github:numtide/flake-utils";
+      nixpkgs.follows = "pf2e-cards/nixpkgs";
+      flake-utils.follows = "pf2e-cards/flake-utils";
       pf2e-cards.url = "github:potsdam-pnp/pf2e-cards";
       pages = {
         flake = false;
