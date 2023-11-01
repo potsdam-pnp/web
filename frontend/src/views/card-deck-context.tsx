@@ -10,7 +10,7 @@ let initialHash = window.location.hash;
 function initialState() {
   if (initialHash.length > 5 && initialHash[1] != "?") {
     const str = atob(initialHash.slice(1));
-    window.history.replaceState(undefined, "", "/");
+    window.history.replaceState(undefined, "", window.location.pathname);
     return JSON.parse(str) as ManageCardDecks.State;
   } else {
     const cardDecks = window.localStorage.getItem("card-decks");
@@ -28,7 +28,7 @@ function initialState() {
       const cards = JSON.parse(json);
       result = ManageCardDecks.reduce(result, { type: "import-deck", name, cards });
     }
-    window.history.replaceState(undefined, "", "/");
+    window.history.replaceState(undefined, "", window.location.pathname);
     return result;
   }
 }
