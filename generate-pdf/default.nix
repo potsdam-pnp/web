@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   name = "cards.pdf";
-  nativeBuildInputs = [(texlive.combine { inherit (texlive) scheme-small latexmk; })];
+  nativeBuildInputs = [(texlive.combine { inherit (texlive) scheme-basic koma-script xetex latexmk pdfpages pdflscape; })];
 
   src = runCommand "our-cards.tex" { 
     inherit pages;
