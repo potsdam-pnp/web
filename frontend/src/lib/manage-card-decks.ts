@@ -77,3 +77,7 @@ export const emptyState: State = {
   errors: [],
   selectedDeck: null
 }
+
+export function loadState(storage: string): State {
+  return JSON.parse(storage);
+}

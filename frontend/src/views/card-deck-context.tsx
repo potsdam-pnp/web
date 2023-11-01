@@ -9,13 +9,21 @@ function initialState() {
     const str = atob(window.location.hash.slice(1));
     return JSON.parse(str) as ManageCardDecks.State;
   } else {
-    return ManageCardDecks.emptyState;
+    const cardDecks = window.localStorage.getItem("card-decks");
+    if (cardDecks) {
+      return ManageCardDecks.loadState(cardDecks);
+    } else {
+      return ManageCardDecks.emptyState;
+    }
   }
 }
 
 export function CardDeckState({ children }: PropsWithChildren) {
-  const [cardDecks, dispatch] = useReducer(ManageCardDecks.reduce, undefined, initialState);
-
+  const [cardDecks, dispatchWrapper] = useReducer(ManageCardDecks.reduce, undefined, initialState);
+  function dispatch(action: ManageCardDecks.Action) {
+    window.localStorage.setItem("card-decks", JSON.stringify(ManageCardDecks.reduce(cardDecks, action)));
+    dispatchWrapper(action);
+  }
 
   return <CardDeckContext.Provider value={cardDecks}>
     <CardDeckDispatchContext.Provider value={dispatch}>
