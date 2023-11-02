@@ -1,8 +1,6 @@
 import { Card, CardDeck } from "./card";
 
 export interface State {
-  decks: CardDeck[];
-  selectedDeck: string | null;
   errors: string[];
   currentlyImporting: CardDeck | null;
 }

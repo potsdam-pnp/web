@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { CardSelector } from './views/card-selector';
 import { CardDecks } from './views/card-decks';
 import loadCardMetadata from './lib/load-card-metadata';
+import { Provider } from 'react-redux'
+import store from "./store"
 
 
 import './scss/styles.scss'
@@ -63,6 +65,8 @@ function App() {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-     <CardDeckState><App /></CardDeckState>
+    <Provider store={store}>
+      <CardDeckState><App /></CardDeckState>
+     </Provider>
   </StrictMode>,
 );
