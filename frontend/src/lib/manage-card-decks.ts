@@ -10,6 +10,7 @@ export interface State {
 export type Action = 
     { type: "add-deck", name: string }
   | { type: "select-deck", deck: CardDeck }
+  | { type: "remove-selected-deck"}
   | { type: "add-card", card: Card }
   | { type: "remove-card", card: Card, index: number }
   | { type: "dismiss-error", index: number }
@@ -60,6 +61,12 @@ export function reduce(state: State, action: Action): State {
         cards: [],
         name: action.name
       });
+    case "remove-selected-deck":
+        return {
+          ...state,
+          selectedDeck: null,
+          decks: state.decks.filter(d => d.name !== state.selectedDeck)
+        }
     case "add-card":
       const card = action.card;
       function addCardToDeck(deck: CardDeck) {

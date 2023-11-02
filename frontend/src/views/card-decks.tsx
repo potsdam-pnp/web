@@ -87,6 +87,7 @@ function CardDeckC() {
         <p>This deck consists of {deck.cards.length} cards</p>
         <PrintDeck deck={deck} />
         <ShareDeck deck={deck} />
+        <RemoveDeck />
         <div className="row">
           {deck.cards.map((card, index) => <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-lg-xl-2 py-3">
             <ShowCard card={card}>
@@ -96,6 +97,11 @@ function CardDeckC() {
         </div>
       </div>;
   }
+}
+
+function RemoveDeck() {
+  const dispatch = React.useContext(CardDeckDispatchContext);
+  return <Button variant="danger" onClick={() => dispatch({ type: "remove-selected-deck"})}>Remove</Button>
 }
 
 function PrintDeck({deck}: {deck: CardDeck}) {
