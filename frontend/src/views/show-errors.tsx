@@ -8,7 +8,7 @@ export function ShowErrors() {
 
   const maxToasts = 4;
 
-  return <ToastContainer position="top-center">
+  return <ToastContainer position="top-center" containerPosition="fixed">
     {Array.from({length: maxToasts}, (_, index) => {
       return <Toast show={index < errors.length} className="text-bg-danger m-3" onClose={() => dispatch({type: "dismiss-error", index: index})}>
         <Toast.Header className="justify-content-between">Error</Toast.Header>
