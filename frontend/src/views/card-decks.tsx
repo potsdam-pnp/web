@@ -2,7 +2,7 @@ import * as React from "react";
 import { CardDeckContext, CardDeckDispatchContext } from "./card-deck-context";
 import { ShowCard } from "./show-card";
 import { ButtonGroup, Button, Modal, Form, InputGroup, ToastContainer, Toast } from "react-bootstrap";
-import { CardDeck } from "../lib/card";
+import { Card, CardDeck } from "../lib/card";
 import revision from "../../dependencies/revision";
 
 
@@ -67,8 +67,18 @@ function CardDecksPicker() {
 
 
 function CardDeckC() {
-  const { decks, selectedDeck } = React.useContext(CardDeckContext)
+  const { decks, selectedDeck } = React.useContext(CardDeckContext);
+  const dispatch = React.useContext(CardDeckDispatchContext);
   const deck = decks.find(d => d.name === selectedDeck);
+
+  function removeCard(card: Card, index: number) {
+    dispatch({
+      type: "remove-card",
+      card: card,
+      index: index
+    })
+  }
+
   if (!deck) {
     return "No card deck selected";
   } else {
@@ -78,8 +88,10 @@ function CardDeckC() {
         <PrintDeck deck={deck} />
         <ShareDeck deck={deck} />
         <div className="row">
-          {deck.cards.map(card => <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-lg-xl-2 py-3">
-            <ShowCard card={card}><span></span></ShowCard>
+          {deck.cards.map((card, index) => <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-lg-xl-2 py-3">
+            <ShowCard card={card}>
+              <Button variant="danger" onClick={() => removeCard(card, index)}>Remove</Button>
+            </ShowCard>
           </div>)}
         </div>
       </div>;

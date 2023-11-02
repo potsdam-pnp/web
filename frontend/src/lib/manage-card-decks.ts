@@ -11,7 +11,7 @@ export type Action =
     { type: "add-deck", name: string }
   | { type: "select-deck", deck: CardDeck }
   | { type: "add-card", card: Card }
-  | { type: "remove-card", card: Card }
+  | { type: "remove-card", card: Card, index: number }
   | { type: "dismiss-error", index: number }
   | { type: "import-deck", name: string, cards: Card[] }
   | { type: "card-deck-import" }
@@ -70,7 +70,14 @@ export function reduce(state: State, action: Action): State {
       }
       return updateSelectedDeck(state, addCardToDeck, "Can't add card when no deck is selected");
     case "remove-card":
-      return addError(state, "Removing cards has not yet been implemented");
+      const index = action.index;
+      function removeCard(deck: CardDeck) {
+        return {
+          ...deck,
+          cards: deck.cards.slice(0, index).concat(deck.cards.slice(index + 1))
+        }
+      }
+      return updateSelectedDeck(state, removeCard, "Can't remove card when no deck is selected");
     case "dismiss-error":
       return {
         ...state,
