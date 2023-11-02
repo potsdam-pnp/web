@@ -11,6 +11,7 @@ export type Action =
     { type: "add-deck", name: string }
   | { type: "select-deck", deck: CardDeck }
   | { type: "remove-selected-deck"}
+  | { type: "rename-selected-deck", name: string }
   | { type: "add-card", card: Card }
   | { type: "remove-card", card: Card, index: number }
   | { type: "dismiss-error", index: number }
@@ -62,11 +63,17 @@ export function reduce(state: State, action: Action): State {
         name: action.name
       });
     case "remove-selected-deck":
-        return {
-          ...state,
-          selectedDeck: null,
-          decks: state.decks.filter(d => d.name !== state.selectedDeck)
-        }
+      return {
+        ...state,
+        selectedDeck: null,
+        decks: state.decks.filter(d => d.name !== state.selectedDeck)
+      }
+    case "rename-selected-deck":
+      return {
+        ...state,
+        selectedDeck: action.name,
+        decks: state.decks.map(d => d.name === state.selectedDeck ? { ...d, name: action.name } : d)
+      }
     case "add-card":
       const card = action.card;
       function addCardToDeck(deck: CardDeck) {

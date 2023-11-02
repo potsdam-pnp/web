@@ -87,6 +87,7 @@ function CardDeckC() {
         <p>This deck consists of {deck.cards.length} cards</p>
         <PrintDeck deck={deck} />
         <ShareDeck deck={deck} />
+        <RenameDeck deck={deck} />
         <RemoveDeck />
         <div className="row">
           {deck.cards.map((card, index) => <div className="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-lg-xl-2 py-3">
@@ -101,7 +102,51 @@ function CardDeckC() {
 
 function RemoveDeck() {
   const dispatch = React.useContext(CardDeckDispatchContext);
-  return <Button variant="danger" onClick={() => dispatch({ type: "remove-selected-deck"})}>Remove</Button>
+  return <Button variant="danger" className="mx-2" onClick={() => dispatch({ type: "remove-selected-deck"})}>Remove</Button>
+}
+
+function RenameDeck({ deck }: { deck: CardDeck }) {
+  const dispatch = React.useContext(CardDeckDispatchContext);
+  const [currentlyRenaming, setCurrentlyRenaming] = React.useState(false);
+  const [newDeckName, setNewDeckName] = React.useState("");
+
+
+  function showRenameDialog() {
+    setCurrentlyRenaming(true);
+  }
+
+  function rename() {
+    setCurrentlyRenaming(false);
+    setNewDeckName("");
+    dispatch({ type: "rename-selected-deck", name: newDeckName })
+  }
+
+  function hide() {
+    setCurrentlyRenaming(false);
+    setNewDeckName("");
+  }
+
+  return <>
+  <Modal show={currentlyRenaming} onHide={hide}>
+    <Modal.Header closeButton>Rename {deck.name}</Modal.Header>
+      <Modal.Body>
+      <Form onSubmit={(e) => { e.preventDefault(); rename(); }}>
+        Rename the card deck currently named <strong>{deck.name}</strong>
+        <InputGroup>
+          <InputGroup.Text>New name</InputGroup.Text>
+          <Form.Control type="text" autoFocus value={newDeckName} onChange={e => setNewDeckName(e.target.value)} />
+        </InputGroup>
+      </Form>
+      </Modal.Body>
+    <Modal.Footer>
+      <Button onClick={hide}>Close</Button>
+      <Button onClick={rename}>Rename</Button>
+    </Modal.Footer>
+  </Modal>
+  <Button onClick={showRenameDialog}>
+    Rename
+  </Button>
+  </>
 }
 
 function PrintDeck({deck}: {deck: CardDeck}) {
