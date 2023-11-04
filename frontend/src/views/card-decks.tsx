@@ -180,7 +180,7 @@ function PrintDeck({deck}: {deck: CardDeck}) {
         <Button onClick={() => setCurrentlyPrinting(false)}>Finished printing</Button>
       </Modal.Footer>
     </Modal>
-    <Button disabled={deck.cards.length===0} onClick={() => setCurrentlyPrinting(true)}>Print this deck</Button>
+    <Button disabled={deck.cards.length===0} onClick={() => setCurrentlyPrinting(true)}>Print</Button>
   </>;
 }
 
@@ -211,6 +211,6 @@ function ShareDeck({deck}: {deck: CardDeck}) {
         </Toast.Body>
       </Toast>
     </ToastContainer>
-    <Button className="mx-2" disabled={deck.cards.length===0} onClick={shareDeck}>Share this deck</Button>
+    <Button className="mx-2" disabled={deck.cards.length===0} onClick={shareDeck}>Share</Button>
   </>;
 }
