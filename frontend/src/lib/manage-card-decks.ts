@@ -69,10 +69,15 @@ export function reduce(state: State, action: Action): State {
         decks: state.decks.filter(d => d.name !== state.selectedDeck)
       }
     case "rename-selected-deck":
-      return {
-        ...state,
-        selectedDeck: action.name,
-        decks: state.decks.map(d => d.name === state.selectedDeck ? { ...d, name: action.name } : d)
+      const containsDeckWithTargetName = state.decks.filter(d => d.name === action.name && d.name !== state.selectedDeck).length > 0;
+      if (containsDeckWithTargetName) {
+        return addError(state, "Deck with name \"" + action.name + "\" already exists");
+      } else {
+        return {
+          ...state,
+          selectedDeck: action.name,
+          decks: state.decks.map(d => d.name === state.selectedDeck ? { ...d, name: action.name } : d)
+        };
       }
     case "add-card":
       const card = action.card;
