@@ -63,10 +63,14 @@ export function reduce(state: State, action: Action): State {
         name: action.name
       });
     case "remove-selected-deck":
-      return {
+    let decks = state.decks.filter(d => d.name !== state.selectedDeck);
+    if (decks.length === 0) {
+      decks = [{ cards: [], name: "Default" }];
+    }
+    return {
         ...state,
         selectedDeck: null,
-        decks: state.decks.filter(d => d.name !== state.selectedDeck)
+        decks: decks
       }
     case "rename-selected-deck":
       const containsDeckWithTargetName = state.decks.filter(d => d.name === action.name && d.name !== state.selectedDeck).length > 0;
@@ -133,9 +137,12 @@ export function reduce(state: State, action: Action): State {
 }
 
 export const emptyState: State = {
-  decks: [],
+  decks: [{
+    name: "Default",
+    cards: []
+  }],
   errors: [],
-  selectedDeck: null,
+  selectedDeck: "Default",
   currentlyImporting: null
 }
 
