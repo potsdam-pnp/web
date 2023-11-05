@@ -139,8 +139,8 @@ function RenameDeck({ deck }: { deck: CardDeck }) {
       </Form>
       </Modal.Body>
     <Modal.Footer>
-      <Button onClick={hide}>Close</Button>
-      <Button onClick={rename}>Rename</Button>
+      <Button variant="outline-secondary" onClick={hide}>Close</Button>
+      <Button variant="outline-primary" onClick={rename}>Rename</Button>
     </Modal.Footer>
   </Modal>
   <Button onClick={showRenameDialog}>
