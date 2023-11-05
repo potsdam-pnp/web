@@ -64,13 +64,15 @@ export function reduce(state: State, action: Action): State {
       });
     case "remove-selected-deck":
     let decks = state.decks.filter(d => d.name !== state.selectedDeck);
+    let selectedDeck = null;
     if (decks.length === 0) {
       decks = [{ cards: [], name: "Default" }];
+      selectedDeck = "Default";
     }
     return {
         ...state,
-        selectedDeck: null,
-        decks: decks
+        selectedDeck,
+        decks
       }
     case "rename-selected-deck":
       const containsDeckWithTargetName = state.decks.filter(d => d.name === action.name && d.name !== state.selectedDeck).length > 0;
